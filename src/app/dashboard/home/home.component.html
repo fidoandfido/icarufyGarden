@@ -1,0 +1,11 @@
+
+<div class="row">
+    <div class="col-md-6 col-sm-3">
+        <h2>Current Garden beds</h2>
+        <ul class="gardenBeds">
+            <li *ngFor="let gardenBed of gardenBeds">
+                <span class="badge">{{gardenBed.id}}</span> {{gardenBed.description}}
+            </li>
+        </ul>
+    </div>
+</div>
