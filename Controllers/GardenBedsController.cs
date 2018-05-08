@@ -2,36 +2,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IcarufyGarden.Data;
 using IcarufyGarden.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace IcarufyGarden.Controllers
 {
 
     [Authorize(Policy = "ApiUser")]
     [Produces("application/json")]
-    [Route("api/GardenBeds")]
+    [Route("api/GardenBedsRawModel")]
     public class GardenBedsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public GardenBedsController(ApplicationDbContext context)
+        public GardenBedsController(ApplicationDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/GardenBeds
         [HttpGet]
         public IEnumerable<GardenBed> GetGardenBeds()
         {
-            return _context.GardenBeds;
+
+            string userName = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _context.GardenBeds.Where(s => s.creator.UserName == userName);
             // Dont include gardenbedTasks - this will break the json!
             //return _context.GardenBeds.Include(gb => gb.GardenBedTasks).ThenInclude(gbt => gbt.Select(gbti => gbti.GardenTask));            
         }
+
+        // You can also just take part after return and use it in async methods.
+        private async Task<AppUser> GetCurrentUser()
+        {
+            return await _userManager.GetUserAsync(HttpContext.User);
+        }
+
 
         // GET: api/GardenBeds/5
         [HttpGet("{id}")]
@@ -56,6 +68,8 @@ namespace IcarufyGarden.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGardenBed([FromRoute] int id, [FromBody] GardenBed gardenBed)
         {
+
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -95,6 +109,9 @@ namespace IcarufyGarden.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            string userName = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            gardenBed.creator = await _context.appUsers.SingleOrDefaultAsync(u => u.UserName == userName);
 
             _context.GardenBeds.Add(gardenBed);
             await _context.SaveChangesAsync();

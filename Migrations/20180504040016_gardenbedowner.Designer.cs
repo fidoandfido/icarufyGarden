@@ -12,9 +12,10 @@ using System;
 namespace IcarufyGarden.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180504040016_gardenbedowner")]
+    partial class gardenbedowner
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,28 +29,13 @@ namespace IcarufyGarden.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("creatorId");
+                    b.Property<string>("ownerId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("creatorId");
+                    b.HasIndex("ownerId");
 
                     b.ToTable("GardenBeds");
-                });
-
-            modelBuilder.Entity("IcarufyGarden.Models.Entities.GardenBedOwners", b =>
-                {
-                    b.Property<string>("OwnerId");
-
-                    b.Property<int>("GardenBedId");
-
-                    b.Property<int>("Id");
-
-                    b.HasKey("OwnerId", "GardenBedId");
-
-                    b.HasIndex("GardenBedId");
-
-                    b.ToTable("GardenBedOwners");
                 });
 
             modelBuilder.Entity("IcarufyGarden.Models.Entities.GardenBedsTasks", b =>
@@ -294,22 +280,9 @@ namespace IcarufyGarden.Migrations
 
             modelBuilder.Entity("IcarufyGarden.Models.Entities.GardenBed", b =>
                 {
-                    b.HasOne("IcarufyGarden.Models.Entities.AppUser", "creator")
+                    b.HasOne("IcarufyGarden.Models.Entities.AppUser", "owner")
                         .WithMany()
-                        .HasForeignKey("creatorId");
-                });
-
-            modelBuilder.Entity("IcarufyGarden.Models.Entities.GardenBedOwners", b =>
-                {
-                    b.HasOne("IcarufyGarden.Models.Entities.GardenBed", "GardenBed")
-                        .WithMany("Owners")
-                        .HasForeignKey("GardenBedId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("IcarufyGarden.Models.Entities.AppUser", "Owner")
-                        .WithMany("GardenBeds")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ownerId");
                 });
 
             modelBuilder.Entity("IcarufyGarden.Models.Entities.GardenBedsTasks", b =>

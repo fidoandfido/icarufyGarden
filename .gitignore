@@ -47,3 +47,10 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+wwwroot/3rdpartylicenses.txt
+wwwroot/favicon.ico
+wwwroot/inline.318b50c57b4eba3d437b.bundle.js
+wwwroot/index.html
+wwwroot/main.a41f02bc5bca1f6b0a64.bundle.js
+wwwroot/polyfills.b6b2cd0d4c472ac3ac12.bundle.js
+wwwroot/styles.3e06219b36e6f557987a.bundle.css

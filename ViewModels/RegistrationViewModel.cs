@@ -3,7 +3,7 @@ using IcarufyGarden.ViewModels.Validations;
 
 namespace IcarufyGarden.ViewModels
 {
-    [Validator(typeof(RegistrationViewModelValidator))]
+    [Validator(typeof(GardenBedModelValidator))]
     public class RegistrationViewModel
     {
         public string Email { get; set; }

@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace IcarufyGarden.ViewModels.Validations
 {
-    public class RegistrationViewModelValidator: AbstractValidator<RegistrationViewModel>
+    public class GardenBedModelValidator: AbstractValidator<RegistrationViewModel>
     {
-        public RegistrationViewModelValidator()
+        public GardenBedModelValidator()
         {
             RuleFor(vm => vm.Email).NotEmpty().WithMessage("Email cannot be empty");
             RuleFor(vm => vm.Password).NotEmpty().WithMessage("Password cannot be empty");

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using IcarufyGarden.Models.Entities;
+using IcarufyGarden.ViewModels;
 
 
 namespace IcarufyGarden.Data
@@ -15,8 +16,10 @@ namespace IcarufyGarden.Data
         public DbSet<PlantType> PlantTypes { get; set; }
         public DbSet<Plant> Plants { get; set; }
         public DbSet<GardenBed> GardenBeds { get; set; }
+        public DbSet<GardenTask> GardenTask { get; set; }
         public DbSet<GardenBedsTasks> GardenBedTasks { get; set; }
-
+        public DbSet<GardenBedOwners> GardenBedOwners { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Generate the identity model indexes!!!
@@ -35,8 +38,25 @@ namespace IcarufyGarden.Data
                             .HasOne(x => x.GardenBed)
                             .WithMany(y => y.GardenBedTasks)
                             .HasForeignKey(x => x.GardenBedId);
+
+
+            // Now generate the garden bed owner relationships
+            modelBuilder.Entity<GardenBedOwners>()
+                .HasKey(x => new { x.OwnerId, x.GardenBedId });
+
+            modelBuilder.Entity<GardenBedOwners>()
+                .HasOne(x => x.Owner)
+                .WithMany(y => y.GardenBeds)
+                .HasForeignKey(x => x.OwnerId);
+
+            modelBuilder.Entity<GardenBedOwners>()
+                            .HasOne(x => x.GardenBed)
+                            .WithMany(y => y.Owners)
+                            .HasForeignKey(x => x.GardenBedId);
+
+            
+
         }
 
-        public DbSet<IcarufyGarden.Models.Entities.GardenTask> GardenTask { get; set; }
     }
 }

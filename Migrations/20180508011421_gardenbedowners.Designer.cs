@@ -12,9 +12,10 @@ using System;
 namespace IcarufyGarden.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180508011421_gardenbedowners")]
+    partial class gardenbedowners
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,11 +29,11 @@ namespace IcarufyGarden.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("creatorId");
+                    b.Property<string>("ownerId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("creatorId");
+                    b.HasIndex("ownerId");
 
                     b.ToTable("GardenBeds");
                 });
@@ -294,9 +295,9 @@ namespace IcarufyGarden.Migrations
 
             modelBuilder.Entity("IcarufyGarden.Models.Entities.GardenBed", b =>
                 {
-                    b.HasOne("IcarufyGarden.Models.Entities.AppUser", "creator")
+                    b.HasOne("IcarufyGarden.Models.Entities.AppUser", "owner")
                         .WithMany()
-                        .HasForeignKey("creatorId");
+                        .HasForeignKey("ownerId");
                 });
 
             modelBuilder.Entity("IcarufyGarden.Models.Entities.GardenBedOwners", b =>
